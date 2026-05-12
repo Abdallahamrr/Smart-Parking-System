@@ -27,6 +27,12 @@ export default function App() {
   const [navZone, setNavZone] = useState("F1-A");
   const [navResult, setNavResult] = useState(null);
   const [reservations, setReservations] = useState(null);
+  const [stats, setStats] = useState(null);
+
+const fetchStats = async () => {
+    const res = await axios.get(`${API}/stats`);
+    setStats(res.data);
+};  
 
   useEffect(() => {
     fetchStatus();
@@ -43,6 +49,7 @@ export default function App() {
     );
     setAllocationResult(res.data);
     fetchStatus();
+    fetchStats();
   };
 
   const compare = async () => {
@@ -63,6 +70,12 @@ export default function App() {
   const releaseSpot = async (spotId) => {
     await axios.post(`${API}/release?spotId=${spotId}`);
     fetchStatus();
+  };
+
+  const resetLot = async () => {
+  await axios.post(`${API}/reset`);
+  fetchStatus();
+  fetchStats();
   };
 
   const floors = [1, 2, 3];
@@ -108,6 +121,22 @@ export default function App() {
           </button>
         ))}
       </div>
+
+      <button
+  onClick={resetLot}
+  style={{
+    marginBottom: "20px",
+    padding: "8px 18px",
+    borderRadius: "6px",
+    background: "#ef4444",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold"
+  }}
+>
+  Reset Lot
+</button> 
 
       <div style={{ padding: "24px 32px" }}>
 
@@ -203,7 +232,21 @@ export default function App() {
                 Compare All Strategies
               </button>
             </div>
-
+            {stats && (
+    <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+        {[
+            { label: "Total Vehicles", value: stats.totalVehicles, color: "#38bdf8" },
+            { label: "Served", value: stats.totalServed, color: "#22c55e" },
+            { label: "Rejected", value: stats.totalRejections, color: "#ef4444" },
+            { label: "Rejection Rate", value: stats.rejectionRate.toFixed(1) + "%", color: "#f97316" },
+        ].map((s) => (
+            <div key={s.label} style={{ background: "#1e293b", padding: "12px 20px", borderRadius: "8px", textAlign: "center", minWidth: "120px" }}>
+                <p style={{ margin: 0, color: "#94a3b8", fontSize: "12px" }}>{s.label}</p>
+                <p style={{ margin: "4px 0 0", color: s.color, fontSize: "24px", fontWeight: "bold" }}>{s.value}</p>
+            </div>
+        ))}
+    </div>
+)}
             {allocationResult && (
               <div style={{ background: "#1e293b", padding: "16px", borderRadius: "8px", marginBottom: "20px" }}>
                 <h3 style={{ color: allocationResult.success ? "#22c55e" : "#ef4444", margin: "0 0 10px" }}>

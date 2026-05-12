@@ -9,8 +9,11 @@ import java.util.List;
 
 @Component
 public class ParkingLotState {
+    
 
     private final List<ParkingSpot> spots = new ArrayList<>();
+    private int totalVehicles = 0;
+    private int totalRejections = 0;
 
     public ParkingLotState() {
         initializeLot();
@@ -54,5 +57,15 @@ public class ParkingLotState {
                 .filter(s -> s.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+    
+    public void incrementVehicles() { totalVehicles++; }
+    public void incrementRejections() { totalRejections++; }
+    public int getTotalVehicles() { return totalVehicles; }
+    public int getTotalRejections() { return totalRejections; }
+
+    public void resetStats() {
+        totalVehicles = 0;
+        totalRejections = 0;
     }
 }

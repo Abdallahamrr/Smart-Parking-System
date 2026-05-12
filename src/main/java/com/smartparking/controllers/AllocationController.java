@@ -58,18 +58,20 @@ public class AllocationController {
         long duration = System.nanoTime() - startTime;
 
         Map<String, Object> result = new HashMap<>();
+        lotState.incrementVehicles();
         if (assigned != null) {
-            assigned.setOccupied(true);
-            assigned.setCurrentVehicle(vehicle);
-            result.put("success", true);
-            result.put("spot", assigned);
-            result.put("vehicle", vehicle);
-            result.put("strategy", strategy);
-            result.put("executionTimeNs", duration);
+        assigned.setOccupied(true);
+        assigned.setCurrentVehicle(vehicle);
+        result.put("success", true);
+        result.put("spot", assigned);
+        result.put("vehicle", vehicle);
+        result.put("strategy", strategy);
+        result.put("executionTimeNs", duration);
         } else {
-            result.put("success", false);
-            result.put("message", "No available spot for vehicle type: " + vehicleType);
-        }
+        lotState.incrementRejections();
+        result.put("success", false);
+        result.put("message", "No available spot for vehicle type: " + vehicleType);
+}
 
         return result;
     }
@@ -124,5 +126,30 @@ public class AllocationController {
             result.put("message", "Spot not found");
         }
         return result;
+    }
+
+    @PostMapping("/reset")
+    public Map<String, Object> reset() {
+    lotState.getAllSpots().forEach(spot -> {
+        spot.setOccupied(false);
+        spot.setReserved(false);
+        spot.setCurrentVehicle(null);
+        });
+    lotState.resetStats();
+    Map<String, Object> result = new HashMap<>();
+    result.put("success", true);
+    result.put("message", "Lot reset successfully");
+    return result;
+    }
+
+    @GetMapping("/stats")
+    public Map<String, Object> getStats() {
+    Map<String, Object> result = new HashMap<>();
+    result.put("totalVehicles", lotState.getTotalVehicles());
+    result.put("totalRejections", lotState.getTotalRejections());
+    result.put("totalServed", lotState.getTotalVehicles() - lotState.getTotalRejections());
+    result.put("rejectionRate", lotState.getTotalVehicles() == 0 ? 0 :
+            (double) lotState.getTotalRejections() / lotState.getTotalVehicles() * 100);
+    return result;
     }
 }
