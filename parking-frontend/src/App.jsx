@@ -16,6 +16,7 @@ export default function App() {
   const [endId, setEndId] = useState("");
   const [pathResult, setPathResult] = useState(null);
   const [mode, setMode] = useState("view");
+  const [travelerMode, setTravelerMode] = useState("FOOT");
   const [vehicleInput, setVehicleInput] = useState("");
   const [loadingFloor, setLoadingFloor] = useState(false);
   const [error, setError] = useState("");
@@ -53,7 +54,7 @@ export default function App() {
     if (mode === "selectEnd") {
       setEndId(cell.id);
       setMode("view");
-      await findPath(startId, cell.id);
+      await findPath(startId, cell.id, travelerMode);
       return;
     }
 
@@ -69,10 +70,10 @@ export default function App() {
     }
   };
 
-  const findPath = async (from, to) => {
+  const findPath = async (from, to, currentTravelerMode = travelerMode) => {
     setError("");
     try {
-      const result = await getPath(from, to);
+      const result = await getPath(from, to, currentTravelerMode);
       setPathResult(result);
       setPathIds(result.found ? new Set(result.path.map((step) => step.id)) : new Set());
     } catch (err) {
@@ -139,7 +140,21 @@ export default function App() {
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+            <select
+              value={travelerMode}
+              onChange={(e) => {
+                const newMode = e.target.value;
+                setTravelerMode(newMode);
+                if (startId && endId) {
+                  findPath(startId, endId, newMode);
+                }
+              }}
+              style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #334155", background: "#1e293b", color: "#f1f5f9" }}
+            >
+              <option value="FOOT">🚶 Walking Mode</option>
+              <option value="CAR">🚗 Driving Mode</option>
+            </select>
             <input
               placeholder="Vehicle ID (for parking)"
               value={vehicleInput}
@@ -164,11 +179,24 @@ export default function App() {
           )}
 
           {pathResult && (
-            <div style={{ background: "#1e293b", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13, border: "1px solid #334155" }}>
+            <div style={{ background: "#1e293b", padding: "16px", borderRadius: 8, marginBottom: 16, fontSize: 13, border: "1px solid #334155" }}>
               {pathResult.found ? (
                 <>
-                  <span style={{ color: "#22c55e", fontWeight: "bold" }}>Path found: </span>
-                  <span style={{ color: "#94a3b8", wordBreak: "break-all" }}>{pathResult.path.map(step => step.id).join(" → ")}</span>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                    <span style={{ color: "#22c55e", fontWeight: "bold", fontSize: 15 }}>✅ Path Found</span>
+                    <span style={{ color: "#38bdf8", fontWeight: "bold", background: "#0f172a", padding: "6px 12px", borderRadius: 6 }}>
+                      ⏱️ {Math.floor(pathResult.totalTimeSeconds / 60) > 0 ? `${Math.floor(pathResult.totalTimeSeconds / 60)}m ` : ""}{pathResult.totalTimeSeconds % 60}s
+                    </span>
+                  </div>
+                  <div style={{ color: "#94a3b8", wordBreak: "break-all", marginBottom: 12, lineHeight: 1.5 }}>
+                    <strong style={{ color: "#e2e8f0" }}>Route:</strong> {pathResult.path.map(step => step.id).join(" → ")}
+                  </div>
+                  {(pathResult.elevatorWalkSeconds > 0 || pathResult.rampTimeSeconds > 0) && (
+                    <div style={{ display: "flex", gap: 12, color: "#cbd5e1", fontSize: 12, background: "#0f172a", padding: "8px 12px", borderRadius: 6, display: "inline-flex" }}>
+                      {pathResult.elevatorWalkSeconds > 0 && <span>🛗 Elevator Time: {pathResult.elevatorWalkSeconds}s</span>}
+                      {pathResult.rampTimeSeconds > 0 && <span>🛬 Ramp Time: {pathResult.rampTimeSeconds}s</span>}
+                    </div>
+                  )}
                 </>
               ) : (
                 <span style={{ color: "#ef4444" }}>No path found between selected points.</span>
