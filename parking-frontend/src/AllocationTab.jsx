@@ -51,6 +51,14 @@ export default function AllocationTab() {
         </div>
       )}
 
+      {loading && !results && (
+        <div style={{ display: "flex", justifyContent: "center", padding: 40, color: "#94a3b8" }}>
+          <div style={{ fontSize: 18, display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 24 }}>⏳</span> Running algorithms...
+          </div>
+        </div>
+      )}
+
       {results && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
           {Object.entries(results).map(([algo, data]) => (

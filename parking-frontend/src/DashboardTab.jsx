@@ -25,8 +25,19 @@ export default function DashboardTab() {
     }
   };
 
-  if (loading) return <div style={{ color: "#94a3b8" }}>Loading dashboard...</div>;
-  if (error) return <div style={{ color: "#ef4444" }}>Error: {error}</div>;
+  if (loading) return (
+    <div style={{ display: "flex", justifyContent: "center", padding: 40, color: "#94a3b8" }}>
+      <div style={{ fontSize: 18, display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 24 }}>⏳</span> Loading dashboard data...
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ background: "#451a1a", border: "1px solid #ef4444", color: "#fecaca", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
+      {error}
+    </div>
+  );
   if (!data) return null;
 
   const floorData = Object.keys(data.floorFill).map(f => ({
@@ -45,8 +56,12 @@ export default function DashboardTab() {
   }));
 
   return (
-    <div style={{ padding: 20, background: "#1e293b", borderRadius: 8, color: "#f1f5f9" }}>
-      <div style={{ display: "flex", gap: 20, marginBottom: 24 }}>
+    <div>
+      <h2 style={{ color: "#38bdf8", marginBottom: 12 }}>Utilization Dashboard</h2>
+      <p style={{ color: "#94a3b8", marginBottom: 20 }}>Real-time overview of parking capacity, floor usage, and historical occupancy trends.</p>
+
+      <div style={{ padding: 20, background: "#1e293b", borderRadius: 8, color: "#f1f5f9" }}>
+        <div style={{ display: "flex", gap: 20, marginBottom: 24 }}>
         <div style={{ background: "#0f172a", padding: 20, borderRadius: 8, flex: 1, textAlign: "center" }}>
           <h3 style={{ margin: 0, color: "#94a3b8", fontSize: 14 }}>Overall Utilization</h3>
           <div style={{ fontSize: 36, fontWeight: "bold", color: "#38bdf8", marginTop: 10 }}>
@@ -174,6 +189,7 @@ export default function DashboardTab() {
             </PieChart>
           </ResponsiveContainer>
         </div>
+      </div>
       </div>
     </div>
   );

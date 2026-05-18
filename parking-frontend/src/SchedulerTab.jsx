@@ -182,7 +182,7 @@ export default function SchedulerTab() {
 
   return (
     <div>
-      <h2 style={{ color: "#a855f7", marginBottom: 12 }}>Reservation Scheduler (Dynamic Programming)</h2>
+      <h2 style={{ color: "#38bdf8", marginBottom: 12 }}>Reservation Scheduler (Dynamic Programming)</h2>
       <p style={{ color: "#94a3b8", marginBottom: 20 }}>
         Optimal interval scheduling to maximize revenue. Resolves overlapping conflicts by refusing some reservations to maximize total revenue.
       </p>
@@ -252,7 +252,11 @@ export default function SchedulerTab() {
       </div>
 
       {loading && !data ? (
-        <p style={{ color: "#94a3b8" }}>Loading schedule...</p>
+        <div style={{ display: "flex", justifyContent: "center", padding: 40, color: "#94a3b8" }}>
+          <div style={{ fontSize: 18, display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 24 }}>⏳</span> Loading schedule...
+          </div>
+        </div>
       ) : data ? (
         <div>
           <div style={{ display: "flex", gap: 20, marginBottom: 24, background: "#1e293b", padding: 16, borderRadius: 8, border: "1px solid #334155", flexWrap: "wrap" }}>

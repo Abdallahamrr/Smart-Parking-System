@@ -1,8 +1,14 @@
 import ParkingCellComponent from "./ParkingCell";
 
 export default function FloorView({ cells, pathIds, startId, endId, onCellClick, isLoading }) {
-  if (isLoading) return <div style={{ color: "#94a3b8" }}>Loading floor...</div>;
-  if (!cells.length) return <div style={{ color: "#94a3b8" }}>No floor data available.</div>;
+  if (isLoading) return (
+    <div style={{ display: "flex", justifyContent: "center", padding: 40, color: "#94a3b8" }}>
+      <div style={{ fontSize: 18, display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 24 }}>⏳</span> Loading floor data...
+      </div>
+    </div>
+  );
+  if (!cells.length) return <div style={{ color: "#94a3b8", padding: 40, textAlign: "center" }}>No floor data available.</div>;
 
   const maxRow = Math.max(...cells.map((c) => c.row));
   const maxCol = Math.max(...cells.map((c) => c.col));

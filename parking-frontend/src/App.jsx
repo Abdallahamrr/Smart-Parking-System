@@ -98,7 +98,7 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", background: "#0f172a", color: "#f1f5f9", fontFamily: "sans-serif", padding: 24 }}>
       <h1 style={{ color: "#38bdf8", marginBottom: 4 }}>Smart Parking System</h1>
-      <p style={{ color: "#94a3b8", marginBottom: 20, fontSize: 13 }}>Graph-based multi-floor navigation</p>
+      <p style={{ color: "#94a3b8", marginBottom: 20, fontSize: 13 }}>Advanced multi-floor navigation, spot allocation, and dynamic scheduling</p>
 
       <div style={{ display: "flex", gap: 10, marginBottom: 24, borderBottom: "1px solid #334155", paddingBottom: 16 }}>
         <button
@@ -128,7 +128,10 @@ export default function App() {
       </div>
 
       {activeTab === "navigation" && (
-        <>
+        <div>
+          <h2 style={{ color: "#38bdf8", marginBottom: 12 }}>Navigation & Floor Map</h2>
+          <p style={{ color: "#94a3b8", marginBottom: 20 }}>Interactive map for finding shortest paths and parking spots.</p>
+
           <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
             {FLOORS.map((floor) => (
               <button
@@ -247,7 +250,7 @@ export default function App() {
             {mode === "selectStart" && "Click any cell to set as navigation start point."}
             {mode === "selectEnd" && "Click any cell to set as navigation end point. The path will calculate automatically."}
           </p>
-        </>
+        </div>
       )}
 
       {activeTab === "allocation" && <AllocationTab />}
