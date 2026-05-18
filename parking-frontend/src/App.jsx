@@ -97,19 +97,19 @@ export default function App() {
       <p style={{ color: "#94a3b8", marginBottom: 20, fontSize: 13 }}>Graph-based multi-floor navigation</p>
 
       <div style={{ display: "flex", gap: 10, marginBottom: 24, borderBottom: "1px solid #334155", paddingBottom: 16 }}>
-        <button 
+        <button
           onClick={() => setActiveTab("navigation")}
           style={{ padding: "8px 16px", borderRadius: 6, border: "none", cursor: "pointer", background: activeTab === "navigation" ? "#38bdf8" : "transparent", color: activeTab === "navigation" ? "#0f172a" : "#94a3b8", fontWeight: "bold", transition: "0.2s" }}
         >
           Navigation & Floor Map
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("allocation")}
           style={{ padding: "8px 16px", borderRadius: 6, border: "none", cursor: "pointer", background: activeTab === "allocation" ? "#38bdf8" : "transparent", color: activeTab === "allocation" ? "#0f172a" : "#94a3b8", fontWeight: "bold", transition: "0.2s" }}
         >
           Spot Allocation
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("scheduler")}
           style={{ padding: "8px 16px", borderRadius: 6, border: "none", cursor: "pointer", background: activeTab === "scheduler" ? "#38bdf8" : "transparent", color: activeTab === "scheduler" ? "#0f172a" : "#94a3b8", fontWeight: "bold", transition: "0.2s" }}
         >
@@ -120,102 +120,95 @@ export default function App() {
       {activeTab === "navigation" && (
         <>
           <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-        {FLOORS.map((floor) => (
-          <button
-            key={floor}
-            onClick={() => setCurrentFloor(floor)}
-            style={{
-              padding: "8px 20px",
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-              background: currentFloor === floor ? "#38bdf8" : "#1e293b",
-              color: currentFloor === floor ? "#0f172a" : "#94a3b8",
-              fontWeight: "bold",
-            }}
-          >
-            Floor {floor}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
-        <input
-          placeholder="Vehicle ID (for parking)"
-          value={vehicleInput}
-          onChange={(event) => setVehicleInput(event.target.value)}
-          style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #334155", background: "#1e293b", color: "#f1f5f9", width: 200 }}
-        />
-        <button onClick={() => setMode("selectStart")} style={{ padding: "8px 16px", borderRadius: 6, background: mode === "selectStart" ? "#22c55e" : "#334155", color: "#fff", border: "none", cursor: "pointer" }}>
-          {mode === "selectStart" ? "Click Start..." : "Set Start"}
-        </button>
-        <button onClick={() => setMode("selectEnd")} disabled={!startId} style={{ padding: "8px 16px", borderRadius: 6, background: mode === "selectEnd" ? "#a855f7" : "#334155", color: "#fff", border: "none", cursor: startId ? "pointer" : "not-allowed", opacity: startId ? 1 : 0.55 }}>
-          {mode === "selectEnd" ? "Click End..." : "Set End"}
-        </button>
-        <button onClick={clearPath} style={{ padding: "8px 16px", borderRadius: 6, background: "#ef4444", color: "#fff", border: "none", cursor: "pointer" }}>
-          Clear Path
-        </button>
-      </div>
-
-      {error && (
-        <div style={{ background: "#451a1a", border: "1px solid #ef4444", color: "#fecaca", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
-          {error}
-        </div>
-      )}
-
-      {pathResult && (
-        <div style={{ background: "#1e293b", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
-          {pathResult.found ? (
-            <>
-              <span style={{ color: "#22c55e" }}>Path found</span>
-              <span style={{ color: "#94a3b8", marginLeft: 12 }}>From: <b style={{ color: "#f1f5f9" }}>{pathResult.fromId}</b></span>
-              <span style={{ color: "#94a3b8", marginLeft: 12 }}>To: <b style={{ color: "#f1f5f9" }}>{pathResult.toId}</b></span>
-              <span style={{ color: "#94a3b8", marginLeft: 12 }}>Nodes: <b style={{ color: "#38bdf8" }}>{pathResult.path.length}</b></span>
-              <span style={{ color: "#94a3b8", marginLeft: 12 }}>
-                Floors: <b style={{ color: "#f97316" }}>
-                  {[...new Set(pathResult.path.map((step) => step.floor))].join(" -> ")}
-                </b>
-              </span>
-            </>
-          ) : (
-            <span style={{ color: "#ef4444" }}>No path found between those cells</span>
-          )}
-        </div>
-      )}
-
-      <div style={{ display: "flex", gap: 14, marginBottom: 16, flexWrap: "wrap" }}>
-        {[
-          ["#22c55e", "Available spot"],
-          ["#ef4444", "Occupied"],
-          ["#374151", "Road"],
-          ["#f97316", "Ramp"],
-          ["#3b82f6", "Elevator"],
-          ["#facc15", "Path"],
-          ["#a855f7", "Start/End"],
-        ].map(([color, label]) => (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <div style={{ width: 14, height: 14, borderRadius: 3, background: color }} />
-            <span style={{ fontSize: 12, color: "#94a3b8" }}>{label}</span>
+            {FLOORS.map((floor) => (
+              <button
+                key={floor}
+                onClick={() => setCurrentFloor(floor)}
+                style={{
+                  padding: "8px 20px",
+                  borderRadius: 8,
+                  border: "none",
+                  cursor: "pointer",
+                  background: currentFloor === floor ? "#38bdf8" : "#1e293b",
+                  color: currentFloor === floor ? "#0f172a" : "#94a3b8",
+                  fontWeight: "bold",
+                }}
+              >
+                Floor {floor}
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div style={{ background: "#1e293b", padding: 20, borderRadius: 8, overflowX: "auto" }}>
-        <FloorView
-          cells={cells}
-          pathIds={pathIds}
-          startId={startId}
-          endId={endId}
-          onCellClick={handleCellClick}
-          isLoading={loadingFloor}
-        />
-      </div>
+          <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+            <input
+              placeholder="Vehicle ID (for parking)"
+              value={vehicleInput}
+              onChange={(event) => setVehicleInput(event.target.value)}
+              style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #334155", background: "#1e293b", color: "#f1f5f9", width: 200 }}
+            />
+            <button onClick={() => setMode("selectStart")} style={{ padding: "8px 16px", borderRadius: 6, background: mode === "selectStart" ? "#22c55e" : "#334155", color: "#fff", border: "none", cursor: "pointer" }}>
+              {mode === "selectStart" ? "Click Start..." : "Set Start"}
+            </button>
+            <button onClick={() => setMode("selectEnd")} disabled={!startId} style={{ padding: "8px 16px", borderRadius: 6, background: mode === "selectEnd" ? "#a855f7" : "#334155", color: "#fff", border: "none", cursor: startId ? "pointer" : "not-allowed", opacity: startId ? 1 : 0.55 }}>
+              {mode === "selectEnd" ? "Click End..." : "Set End"}
+            </button>
+            <button onClick={clearPath} style={{ padding: "8px 16px", borderRadius: 6, background: "#ef4444", color: "#fff", border: "none", cursor: "pointer" }}>
+              Clear Path
+            </button>
+          </div>
 
-      <p style={{ marginTop: 12, fontSize: 12, color: "#64748b" }}>
-        {mode === "view" && "Click a parking spot to park/release. Use Set Start -> Set End to find a path."}
-        {mode === "selectStart" && "Click any cell to set as navigation start point."}
-        {mode === "selectEnd" && "Click any cell to set as navigation end point. The path will calculate automatically."}
-      </p>
+          {error && (
+            <div style={{ background: "#451a1a", border: "1px solid #ef4444", color: "#fecaca", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
+              {error}
+            </div>
+          )}
+
+          {pathResult && (
+            <div style={{ background: "#1e293b", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 13, border: "1px solid #334155" }}>
+              {pathResult.found ? (
+                <>
+                  <span style={{ color: "#22c55e", fontWeight: "bold" }}>Path found: </span>
+                  <span style={{ color: "#94a3b8", wordBreak: "break-all" }}>{pathResult.path.map(step => step.id).join(" → ")}</span>
+                </>
+              ) : (
+                <span style={{ color: "#ef4444" }}>No path found between selected points.</span>
+              )}
+            </div>
+          )}
+
+          <div style={{ display: "flex", gap: 14, marginBottom: 16, flexWrap: "wrap" }}>
+            {[
+              ["#22c55e", "Available spot"],
+              ["#ef4444", "Occupied"],
+              ["#374151", "Road"],
+              ["#f97316", "Ramp"],
+              ["#3b82f6", "Elevator"],
+              ["#facc15", "Path"],
+              ["#a855f7", "Start/End"],
+            ].map(([color, label]) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ width: 14, height: 14, borderRadius: 3, background: color }} />
+                <span style={{ fontSize: 12, color: "#94a3b8" }}>{label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: "#1e293b", padding: 20, borderRadius: 8, overflowX: "auto" }}>
+            <FloorView
+              cells={cells}
+              pathIds={pathIds}
+              startId={startId}
+              endId={endId}
+              onCellClick={handleCellClick}
+              isLoading={loadingFloor}
+            />
+          </div>
+
+          <p style={{ marginTop: 12, fontSize: 12, color: "#64748b" }}>
+            {mode === "view" && "Click a parking spot to park/release. Use Set Start -> Set End to find a path."}
+            {mode === "selectStart" && "Click any cell to set as navigation start point."}
+            {mode === "selectEnd" && "Click any cell to set as navigation end point. The path will calculate automatically."}
+          </p>
         </>
       )}
 
