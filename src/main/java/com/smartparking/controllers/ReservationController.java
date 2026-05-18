@@ -23,11 +23,24 @@ public class ReservationController {
     public Map<String, Object> getOptimalSchedule() {
         List<Reservation> all = dpScheduler.getSampleReservations();
         List<Reservation> optimal = dpScheduler.schedule(all);
+        
+        List<Reservation> rejected = all.stream()
+                .filter(r -> !optimal.contains(r))
+                .toList();
 
         Map<String, Object> result = new HashMap<>();
         result.put("totalReservations", all.size());
         result.put("optimalCount", optimal.size());
         result.put("selected", optimal.stream().map(r -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("vehicleId", r.vehicleId);
+            map.put("arrival", r.arrival.toString());
+            map.put("departure", r.departure.toString());
+            map.put("type", r.type.toString());
+            return map;
+        }).toList());
+        
+        result.put("rejected", rejected.stream().map(r -> {
             Map<String, String> map = new HashMap<>();
             map.put("vehicleId", r.vehicleId);
             map.put("arrival", r.arrival.toString());

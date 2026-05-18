@@ -32,7 +32,7 @@ public class DPScheduler {
         }
     }
 
-    // DP Interval Scheduling — maximize number of reservations served
+    // DP Interval Scheduling - maximize number of reservations served
     public List<Reservation> schedule(List<Reservation> reservations) {
         if (reservations.isEmpty()) return new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class DPScheduler {
 
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < i; j++) {
-                // No overlap — departure of j before arrival of i
+                // No overlap - departure of j before arrival of i
                 if (sorted.get(j).departureMinutes() <= sorted.get(i).arrivalMinutes()) {
                     if (dp[j] + 1 > dp[i]) {
                         dp[i] = dp[j] + 1;

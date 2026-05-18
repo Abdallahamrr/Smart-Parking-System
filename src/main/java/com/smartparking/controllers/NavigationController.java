@@ -1,23 +1,25 @@
 package com.smartparking.controllers;
 
-import com.smartparking.algorithms.Dijkstra;
+import com.smartparking.dto.PathResponseDTO;
+import com.smartparking.service.NavigationService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequestMapping("/api/navigate")
+@RequestMapping("/api/navigation")
 @CrossOrigin(origins = "*")
 public class NavigationController {
 
-    private final Dijkstra dijkstra;
+    private final NavigationService navigationService;
 
-    public NavigationController(Dijkstra dijkstra) {
-        this.dijkstra = dijkstra;
+    public NavigationController(NavigationService navigationService) {
+        this.navigationService = navigationService;
     }
 
-    @GetMapping("/{zone}")
-    public Map<String, Object> navigate(@PathVariable String zone) {
-        return dijkstra.findPath(zone);
+    @GetMapping("/path")
+    public PathResponseDTO getPath(
+        @RequestParam String from,
+        @RequestParam String to
+    ) {
+        return navigationService.navigate(from, to);
     }
 }
