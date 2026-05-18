@@ -3,6 +3,7 @@ import { getFloor, getPath, occupySpot, releaseSpot } from "./services/api";
 import FloorView from "./FloorView";
 import AllocationTab from "./AllocationTab";
 import SchedulerTab from "./SchedulerTab";
+import DashboardTab from "./DashboardTab";
 
 const FLOORS = [1, 2, 3];
 const generateVehicleId = () => `VH-${Date.now()}`;
@@ -115,6 +116,12 @@ export default function App() {
           style={{ padding: "8px 16px", borderRadius: 6, border: "none", cursor: "pointer", background: activeTab === "scheduler" ? "#38bdf8" : "transparent", color: activeTab === "scheduler" ? "#0f172a" : "#94a3b8", fontWeight: "bold", transition: "0.2s" }}
         >
           Reservation Scheduler
+        </button>
+        <button
+          onClick={() => setActiveTab("dashboard")}
+          style={{ padding: "8px 16px", borderRadius: 6, border: "none", cursor: "pointer", background: activeTab === "dashboard" ? "#38bdf8" : "transparent", color: activeTab === "dashboard" ? "#0f172a" : "#94a3b8", fontWeight: "bold", transition: "0.2s" }}
+        >
+          Utilization Dashboard
         </button>
       </div>
 
@@ -242,6 +249,7 @@ export default function App() {
 
       {activeTab === "allocation" && <AllocationTab />}
       {activeTab === "scheduler" && <SchedulerTab />}
+      {activeTab === "dashboard" && <DashboardTab />}
     </div>
   );
 }

@@ -28,3 +28,4 @@ export const getPath = (from, to, mode = "FOOT") =>
 
 export const compareAllocation  = (vehicleType) => request(`/allocation/compare?vehicleType=${encodeURIComponent(vehicleType)}`);
 export const getOptimalSchedule = ()            => request("/reservations");
+export const getUtilization     = ()            => request("/utilization");
