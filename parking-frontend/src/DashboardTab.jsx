@@ -58,6 +58,63 @@ export default function DashboardTab() {
         </div>
       </div>
 
+      {/* Available Spots Breakdown */}
+      <div style={{ display: "flex", gap: 20, marginBottom: 24, flexWrap: "wrap" }}>
+        {/* Designated Spot Availability */}
+        <div style={{ background: "#0f172a", padding: 20, borderRadius: 8, flex: 1, minWidth: 300 }}>
+          <h3 style={{ margin: "0 0 8px 0", color: "#38bdf8", fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 18 }}>📊</span> Designated Spot Availability
+          </h3>
+          <p style={{ color: "#64748b", fontSize: 12, margin: "0 0 16px 0" }}>
+            Number of free spots specifically designated for each size.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {data.availableSpotsByDesignatedType && Object.entries(data.availableSpotsByDesignatedType).map(([type, count]) => (
+              <div key={type} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", padding: "10px 14px", borderRadius: 6, borderLeft: `4px solid ${type === "COMPACT" ? "#38bdf8" : type === "STANDARD" ? "#a855f7" : type === "SUV" ? "#22c55e" : "#facc15"}` }}>
+                <span style={{ fontWeight: 600, color: "#cbd5e1", fontSize: 13 }}>{type} Spot</span>
+                <span style={{
+                  background: count > 0 ? "rgba(34, 197, 94, 0.15)" : "rgba(239, 68, 68, 0.15)",
+                  color: count > 0 ? "#4ade80" : "#f87171",
+                  padding: "4px 10px",
+                  borderRadius: 4,
+                  fontWeight: "bold",
+                  fontSize: 12
+                }}>
+                  {count} Free
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Fitting Spot Availability */}
+        <div style={{ background: "#0f172a", padding: 20, borderRadius: 8, flex: 1, minWidth: 300 }}>
+          <h3 style={{ margin: "0 0 8px 0", color: "#a855f7", fontSize: 15, display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 18 }}>🚗</span> Compatible Spot Availability
+          </h3>
+          <p style={{ color: "#64748b", fontSize: 12, margin: "0 0 16px 0" }}>
+            Total number of free spots that can fit each vehicle type.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {data.availableSpotsByFittingVehicleType && Object.entries(data.availableSpotsByFittingVehicleType).map(([type, count]) => (
+              <div key={type} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1e293b", padding: "10px 14px", borderRadius: 6, borderLeft: `4px solid ${type === "COMPACT" ? "#38bdf8" : type === "STANDARD" ? "#a855f7" : type === "SUV" ? "#22c55e" : "#facc15"}` }}>
+                <span style={{ fontWeight: 600, color: "#cbd5e1", fontSize: 13 }}>{type} Vehicle</span>
+                <span style={{
+                  background: count > 0 ? "rgba(56, 189, 248, 0.15)" : "rgba(239, 68, 68, 0.15)",
+                  color: count > 0 ? "#38bdf8" : "#f87171",
+                  padding: "4px 10px",
+                  borderRadius: 4,
+                  fontWeight: "bold",
+                  fontSize: 12
+                }}>
+                  {count} Fits
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 20, marginBottom: 24, flexWrap: "wrap" }}>
         {/* Floor Fill */}
         <div style={{ background: "#0f172a", padding: 20, borderRadius: 8, flex: 1, minWidth: 300 }}>

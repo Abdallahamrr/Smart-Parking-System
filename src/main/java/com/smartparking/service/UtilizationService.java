@@ -4,6 +4,7 @@ import com.smartparking.dto.UtilizationDTO;
 import com.smartparking.dto.UtilizationDTO.TimeSeriesPoint;
 import com.smartparking.models.CellType;
 import com.smartparking.models.ParkingCell;
+import com.smartparking.models.VehicleType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -52,6 +53,29 @@ public class UtilizationService {
             vehicleTypeBreakdown.put(type, vehicleTypeBreakdown.getOrDefault(type, 0) + 1);
         });
 
+        // Available designated spots by exact size
+        Map<String, Integer> availableSpotsByDesignatedType = new HashMap<>();
+        for (VehicleType vt : VehicleType.values()) {
+            availableSpotsByDesignatedType.put(vt.name(), 0);
+        }
+        allCells.stream()
+                .filter(cell -> !cell.isOccupied() && !cell.isReserved())
+                .forEach(cell -> {
+                    String type = cell.getMaxSize() != null ? cell.getMaxSize().name() : "UNKNOWN";
+                    availableSpotsByDesignatedType.put(type, availableSpotsByDesignatedType.getOrDefault(type, 0) + 1);
+                });
+
+        // Available fitting spots per vehicle type (based on size values)
+        Map<String, Integer> availableSpotsByFittingVehicleType = new HashMap<>();
+        for (VehicleType vt : VehicleType.values()) {
+            int vtValue = sizeValue(vt);
+            long count = allCells.stream()
+                    .filter(cell -> !cell.isOccupied() && !cell.isReserved())
+                    .filter(cell -> cell.getMaxSize() != null && sizeValue(cell.getMaxSize()) >= vtValue)
+                    .count();
+            availableSpotsByFittingVehicleType.put(vt.name(), (int) count);
+        }
+
         // Generate dummy time-series data ending at the current occupancy
         List<TimeSeriesPoint> timeSeries = new ArrayList<>();
         LocalTime now = LocalTime.now();
@@ -73,8 +97,19 @@ public class UtilizationService {
         dto.setFloorFill(floorFill);
         dto.setZoneFill(zoneFill);
         dto.setVehicleTypeBreakdown(vehicleTypeBreakdown);
+        dto.setAvailableSpotsByDesignatedType(availableSpotsByDesignatedType);
+        dto.setAvailableSpotsByFittingVehicleType(availableSpotsByFittingVehicleType);
         dto.setTimeSeries(timeSeries);
 
         return dto;
+    }
+
+    private int sizeValue(VehicleType type) {
+        return switch (type) {
+            case COMPACT -> 1;
+            case STANDARD -> 2;
+            case SUV -> 3;
+            case TRUCK -> 4;
+        };
     }
 }

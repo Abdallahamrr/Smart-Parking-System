@@ -71,6 +71,26 @@ public class GraphBuilder {
                     if (type == CellType.PARKING_SPOT) spotCounter++;
 
                     ParkingCell cell = new ParkingCell(id, floorNum, r, c, type);
+                    if (type == CellType.PARKING_SPOT) {
+                        // Specialize spot sizes based on spotCounter (which ranges from 1 to 24 per floor)
+                        // Assigning:
+                        // COMPACT (25%) -> 6 spots/floor (mod 1, 2)
+                        // STANDARD (37.5%) -> 9 spots/floor (mod 3, 4, 5)
+                        // SUV (25%) -> 6 spots/floor (mod 6, 7)
+                        // TRUCK (12.5%) -> 3 spots/floor (mod 0)
+                        VehicleType specializedType;
+                        int mod = spotCounter % 8;
+                        if (mod == 1 || mod == 2) {
+                            specializedType = VehicleType.COMPACT;
+                        } else if (mod == 3 || mod == 4 || mod == 5) {
+                            specializedType = VehicleType.STANDARD;
+                        } else if (mod == 6 || mod == 7) {
+                            specializedType = VehicleType.SUV;
+                        } else {
+                            specializedType = VehicleType.TRUCK;
+                        }
+                        cell.setMaxSize(specializedType);
+                    }
                     cells.put(id, cell);
                     nodes.put(id, new GraphNode(cell));
                 }

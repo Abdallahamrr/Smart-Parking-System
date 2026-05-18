@@ -41,9 +41,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    loadFloor(currentFloor);
+    if (activeTab === "navigation") {
+      loadFloor(currentFloor, true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentFloor]);
+  }, [currentFloor, activeTab]);
 
   const handleCellClick = async (cell) => {
     if (mode === "selectStart") {
@@ -214,6 +216,7 @@ export default function App() {
           <div style={{ display: "flex", gap: 14, marginBottom: 16, flexWrap: "wrap" }}>
             {[
               ["#22c55e", "Available spot"],
+              ["#3b82f6", "Reserved"],
               ["#ef4444", "Occupied"],
               ["#374151", "Road"],
               ["#f97316", "Ramp"],

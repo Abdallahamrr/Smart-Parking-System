@@ -10,6 +10,8 @@ public class UtilizationDTO {
     private Map<Integer, Double> floorFill;
     private Map<String, Double> zoneFill;
     private Map<String, Integer> vehicleTypeBreakdown;
+    private Map<String, Integer> availableSpotsByDesignatedType;
+    private Map<String, Integer> availableSpotsByFittingVehicleType;
     private List<TimeSeriesPoint> timeSeries;
 
     public UtilizationDTO() {}
@@ -31,6 +33,12 @@ public class UtilizationDTO {
 
     public Map<String, Integer> getVehicleTypeBreakdown() { return vehicleTypeBreakdown; }
     public void setVehicleTypeBreakdown(Map<String, Integer> vehicleTypeBreakdown) { this.vehicleTypeBreakdown = vehicleTypeBreakdown; }
+
+    public Map<String, Integer> getAvailableSpotsByDesignatedType() { return availableSpotsByDesignatedType; }
+    public void setAvailableSpotsByDesignatedType(Map<String, Integer> availableSpotsByDesignatedType) { this.availableSpotsByDesignatedType = availableSpotsByDesignatedType; }
+
+    public Map<String, Integer> getAvailableSpotsByFittingVehicleType() { return availableSpotsByFittingVehicleType; }
+    public void setAvailableSpotsByFittingVehicleType(Map<String, Integer> availableSpotsByFittingVehicleType) { this.availableSpotsByFittingVehicleType = availableSpotsByFittingVehicleType; }
 
     public List<TimeSeriesPoint> getTimeSeries() { return timeSeries; }
     public void setTimeSeries(List<TimeSeriesPoint> timeSeries) { this.timeSeries = timeSeries; }

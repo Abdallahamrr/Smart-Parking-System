@@ -23,6 +23,7 @@ export default function ParkingCellComponent({ cell, isOnPath, isStart, isEnd, o
   const baseStyle = TYPE_STYLES[cell.type] || TYPE_STYLES.WALL;
 
   let background = baseStyle.background;
+  if (isSpot && cell.reserved) background = "#3b82f6"; // Blue for reserved spots
   if (isSpot && cell.occupied) background = "#ef4444";
   if (isOnPath) background = "#facc15";
   if (isStart) background = "#22c55e";
@@ -57,6 +58,25 @@ export default function ParkingCellComponent({ cell, isOnPath, isStart, isEnd, o
         userSelect: "none",
       }}
     >
+      {isSpot && (
+        <span style={{
+          fontSize: 7,
+          fontWeight: 800,
+          background: "rgba(15, 23, 42, 0.75)",
+          color: cell.maxSize === "COMPACT" ? "#38bdf8" :
+                 cell.maxSize === "STANDARD" ? "#a855f7" :
+                 cell.maxSize === "SUV" ? "#22c55e" : "#facc15",
+          padding: "1px 3px",
+          borderRadius: 2,
+          marginBottom: 1,
+          textTransform: "uppercase",
+          letterSpacing: "0.5px"
+        }}>
+          {cell.maxSize === "COMPACT" ? "COMP" :
+           cell.maxSize === "STANDARD" ? "STD" :
+           cell.maxSize === "SUV" ? "SUV" : "TRK"}
+        </span>
+      )}
       <span style={{ fontSize: 12 }}>{TYPE_LABELS[cell.type] ?? null}</span>
       <span style={{ fontSize: 9, marginTop: 1, color: "#e2e8f0" }}>{cell.label}</span>
       {isSpot && cell.occupied && (
