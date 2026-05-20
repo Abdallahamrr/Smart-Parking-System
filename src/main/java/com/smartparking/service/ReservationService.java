@@ -97,7 +97,7 @@ public class ReservationService {
 
             // Find all spots that can fit this vehicle type AND are not yet reserved
             List<ParkingCell> suitableSpots = allSpots.stream()
-                .filter(spot -> !spot.isReserved() && sizeValue(spot.getMaxSize()) >= sizeValue(type))
+                .filter(spot -> !spot.isReserved() && !spot.isOccupied() && sizeValue(spot.getMaxSize()) >= sizeValue(type))
                 .toList();
 
             for (ParkingCell spot : suitableSpots) {
